@@ -201,17 +201,52 @@ public class Bintang {
         return movements;
     }
 
+    private static String[][] readGraphFromInput() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            ArrayList<String> rows = new ArrayList<>();
+            
+            System.out.println("Masukkan graph (ketik 'OK' pada baris baru untuk selesai):");
+            
+            while (true) {
+                String line = scanner.nextLine().trim();
+                if (line.equalsIgnoreCase("OK")) {
+                    break;
+                }
+                rows.add(line);
+            }
+            
+            if (rows.isEmpty()) {
+                return null;
+            }
+            
+            int rowCount = rows.size();
+            int colCount = rows.get(0).length();
+            String[][] graph = new String[rowCount][colCount];
+            
+            for (int i = 0; i < rowCount; i++) {
+                String row = rows.get(i);
+                if (row.length() != colCount) {
+                    System.out.println("Error: Semua baris harus memiliki panjang yang sama");
+                    return null;
+                }
+                graph[i] = row.split("");
+            }
+            
+            return graph;
+        }
+    }
+
     public static void main(String[] args) {
-        String graph[][] = new String[][] {
-            { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
-            { "#", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "*", "#" },
-            { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", " ", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
-            { "#", " ", " ", " ", " ", " ", " ", " ", "#", " ", " ", " ", " ", " ", "#", " ", " ", " ", " ", " ", " ", " ", "#" },
-            { "#", " ", "#", "#", "#", "#", "#", "#", "#", " ", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
-            { "#", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "#" },
-            { "#", " ", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
-            { "#", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "^", " ", " ", " ", "#" },
-            { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" } };
+        // String graph[][] = new String[][] {
+        //     { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
+        //     { "#", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "*", "#" },
+        //     { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", " ", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
+        //     { "#", " ", " ", " ", " ", " ", " ", " ", "#", " ", " ", " ", " ", " ", "#", " ", " ", " ", " ", " ", " ", " ", "#" },
+        //     { "#", " ", "#", "#", "#", "#", "#", "#", "#", " ", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
+        //     { "#", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "#" },
+        //     { "#", " ", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
+        //     { "#", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "^", " ", " ", " ", "#" },
+        //     { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" } };
 
         // String graph[][] = new String[][] {
         //     { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" },
@@ -225,12 +260,18 @@ public class Bintang {
         //     { "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#" } };
 
         // String graph[][] = new String[][] {{ "#", "*", "#", "^", "#" }};
-
-        List<Node> path = findShortestPath(graph);
-        if (path != null) {
-            printPath(graph, path);
+        
+        String[][] graph = readGraphFromInput();
+    
+        if (graph != null && graph.length > 0) {
+            List<Node> path = findShortestPath(graph);
+            if (path != null) {
+                printPath(graph, path);
+            } else {
+                System.out.println("tidak ada jalan");
+            }
         } else {
-            System.out.println("tidak ada jalan");
+            System.out.println("Input tidak valid");
         }
     }
 }
